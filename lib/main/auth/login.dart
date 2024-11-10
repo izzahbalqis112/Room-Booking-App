@@ -17,7 +17,6 @@ class Login extends StatefulWidget {
 }
 
 class _LoginState extends State<Login> {
-  //text controllers
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   bool _isEmailValid = true;
@@ -26,7 +25,6 @@ class _LoginState extends State<Login> {
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
   bool _validateEmail(String email) {
-    // Regular expressions for the accepted email formats
     final RegExp googleEmail =
     RegExp(r'^[\w.+-]+@gmail\.com$', caseSensitive: false);
     final RegExp utemEmail =
@@ -36,14 +34,13 @@ class _LoginState extends State<Login> {
     final RegExp yahooEmail =
     RegExp(r'^[\w.+-]+@yahoo\.com$', caseSensitive: false);
 
-    // Check if the email matches any of the accepted formats
     if (googleEmail.hasMatch(email) ||
         utemEmail.hasMatch(email) ||
         outlookEmail.hasMatch(email) ||
         yahooEmail.hasMatch(email)) {
-      return true; // Email is valid
+      return true; 
     } else {
-      return false; // Email is invalid
+      return false;
     }
   }
 
@@ -63,32 +60,26 @@ class _LoginState extends State<Login> {
 
       User? user = userCredential.user;
 
-      // Fetch manager's email from Firestore
       QuerySnapshot querySnapshot = await FirebaseFirestore.instance
           .collection('usersAccount')
           .where('email', isEqualTo: _emailController.text)
           .get();
 
-      // Check if manager email exists in the collection
       if (querySnapshot.docs.isNotEmpty) {
         String userEmail = querySnapshot.docs.first.get('email');
 
-        // Check if the logged-in user's email matches the manager's email
         if (user?.email == _emailController.text && _emailController.text == userEmail) {
-          // Login successful, navigate to home screen
           Navigator.push(
             context,
             MaterialPageRoute(builder: (context) => ButtomNavBar()),
           );
         } else {
-          // User is not authorized, show error message
           Fluttertoast.showToast(
             msg: 'You are not authorized to log in',
             gravity: ToastGravity.BOTTOM,
           );
         }
       } else {
-        // Manager email not found in the collection
         Fluttertoast.showToast(
           msg: 'You are not authorized to log in',
           gravity: ToastGravity.BOTTOM,
@@ -139,13 +130,11 @@ class _LoginState extends State<Login> {
                 Align(
                   alignment: Alignment.centerLeft,
                   child: Padding(
-                    padding: const EdgeInsets.only(left: 40.0), // Adjust the left padding as needed
+                    padding: const EdgeInsets.only(left: 40.0), 
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const SizedBox(
-                            height:
-                            40), // Adjust the space between "Teaching Factory" and the new text
+                        const SizedBox(height:40),
                         Text(
                           "Log in into your Account",
                           style: TextStyle(
@@ -154,10 +143,10 @@ class _LoginState extends State<Login> {
                             fontWeight: FontWeight.normal,
                           ),
                         ),
-                        const SizedBox(height: 20), // Add space below the text
+                        const SizedBox(height: 20), 
                         Container(
-                          padding: EdgeInsets.only(left: 0.05), // Adjust the left padding for center-left alignment
-                          width: MediaQuery.of(context).size.width - 80, // Adjust width as needed
+                          padding: EdgeInsets.only(left: 0.05),
+                          width: MediaQuery.of(context).size.width - 80, 
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
@@ -174,7 +163,7 @@ class _LoginState extends State<Login> {
                                             color: _isEmailValid
                                                 ? shadeColor2
                                                 : Colors
-                                                .red, // Dynamic border color based on email validity
+                                                .red,
                                           ),
                                         ),
                                         focusedBorder: OutlineInputBorder(
@@ -182,7 +171,7 @@ class _LoginState extends State<Login> {
                                             color: _isEmailValid
                                                 ? shadeColor2
                                                 : Colors
-                                                .red, // Dynamic border color based on email validity
+                                                .red,
                                           ),
                                           borderRadius: BorderRadius.circular(12),
                                         ),
@@ -210,19 +199,19 @@ class _LoginState extends State<Login> {
                                 Padding(
                                   padding: const EdgeInsets.only(
                                       left: 10.0,
-                                      top: 5.0), // Adjust padding as needed
+                                      top: 5.0),
                                   child: Text(
                                     'Invalid email format',
                                     style: TextStyle(
-                                      color: Colors.red, // Adjust color as needed
-                                      fontSize: 12, // Adjust font size as needed
+                                      color: Colors.red,
+                                      fontSize: 12, 
                                     ),
                                   ),
                                 ),
                             ],
                           ),
                         ),
-                        const SizedBox(height: 12), // Add space below the text
+                        const SizedBox(height: 12), 
                         Container(
                           padding: EdgeInsets.only(left: 0.05),
                           width: MediaQuery.of(context).size.width - 80,
@@ -288,7 +277,7 @@ class _LoginState extends State<Login> {
                                       "Forgot Password?",
                                       style: TextStyle(
                                         color:
-                                        shadeColor2, // You can adjust the color as needed
+                                        shadeColor2, 
                                       ),
                                     ),
                                   ),
@@ -297,7 +286,7 @@ class _LoginState extends State<Login> {
                               Column(
                                 mainAxisAlignment: MainAxisAlignment.end,
                                 children: [
-                                  const SizedBox(height: 5), // Ad
+                                  const SizedBox(height: 5),
                                   ElevatedButton(
                                     style: ElevatedButton.styleFrom(
                                       backgroundColor: shadeColor4,
@@ -307,12 +296,12 @@ class _LoginState extends State<Login> {
                                           140),
                                       shape: RoundedRectangleBorder(
                                         borderRadius: BorderRadius.circular(
-                                            44), // Adjust border radius
+                                            44),
                                         side: BorderSide(
                                             color: shadeColor1,
-                                            width: 2), // Border color and width
+                                            width: 2),
                                       ),
-                                      elevation: 5, //shadow
+                                      elevation: 5,
                                     ),
                                     onPressed: _login,
                                     child: Text(
@@ -320,14 +309,14 @@ class _LoginState extends State<Login> {
                                       style: TextStyle(
                                           fontWeight: FontWeight.bold,
                                           fontSize: 18,
-                                          color: Colors.white), // Text style
+                                          color: Colors.white), 
                                     ),
                                   ),
                                 ],
                               ),
                               const SizedBox(height: 25),
 
-                              // Don't have an account? Signup
+                             
                               Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
@@ -342,7 +331,7 @@ class _LoginState extends State<Login> {
                                     onTap: () {
                                       Navigator.push(
                                         context,
-                                        MaterialPageRoute(builder: (context) => Signup1()), // Replace LoginPage with your actual login page widget.
+                                        MaterialPageRoute(builder: (context) => Signup1()), 
                                       );
                                     },
                                     child: Text(
