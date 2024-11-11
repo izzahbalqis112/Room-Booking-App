@@ -35,10 +35,8 @@ class _UploadPageState extends State<UploadPage> {
     DocumentSnapshot? bookingDoc;
 
     try {
-      // Get the current user's email
       String? currentUserEmail = FirebaseAuth.instance.currentUser?.email;
 
-      // Query Firestore for the specific booking document
       QuerySnapshot snapshot = await FirebaseFirestore.instance
           .collection('roomBookingData')
           .where('bookingStatus.status', isEqualTo: 'Pending Payment')
@@ -46,31 +44,25 @@ class _UploadPageState extends State<UploadPage> {
           .get();
 
       if (snapshot.docs.isNotEmpty) {
-        // Assuming you want to update the first matched document
         DocumentSnapshot bookingDoc = snapshot.docs.first;
         List<Map<String, String>> fileDetailsList = [];
 
         for (PlatformFile pickedFile in pickedFiles!) {
-          // Ensure the correct File import is used
           final file = File(pickedFile.path!);
 
-          // Upload file to Firebase Storage
           final storageRef = FirebaseStorage.instance
               .ref()
               .child('uploads/${pickedFile.name}');
           await storageRef.putFile(file);
 
-          // Get file URL
           final fileURL = await storageRef.getDownloadURL();
 
-          // Store file details
           fileDetailsList.add({
             'fileName': pickedFile.name,
             'fileURL': fileURL,
           });
         }
 
-        // Set the payment details and update the booking status in the booking document
         await FirebaseFirestore.instance
             .collection('roomBookingData')
             .doc(bookingDoc.id)
@@ -89,7 +81,6 @@ class _UploadPageState extends State<UploadPage> {
       bool isBookingUpdate = true;
 
       if (isBookingUpdate) {
-        // Save notification data to Firestore
         await _firestore.collection('notifications').add({
           'title': 'Teaching Factory',
           'body': 'User booking request still in process',
@@ -99,13 +90,11 @@ class _UploadPageState extends State<UploadPage> {
         });
       }
 
-      // Navigate to bottom navigation bar page
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (context) => ButtomNavBar()),
       );
     } catch (e) {
-      // Handle errors
       print('Error uploading files: $e');
     }
   }
@@ -152,20 +141,20 @@ class _UploadPageState extends State<UploadPage> {
                     style: TextStyle(
                       fontSize: 16.0,
                       color: Colors.black87,
-                      fontFamily: 'Roboto', // Customize the font family if needed
+                      fontFamily: 'Roboto', 
                     ),
                     children: [
                       TextSpan(
                         text: 'Important !!! ',
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
-                          color: Colors.red, // Customize the color if needed
+                          color: Colors.red,
                         ),
                       ),
                       WidgetSpan(
                         child: Center(
                           child: Padding(
-                            padding: EdgeInsets.only(top: 8.0), // Adjust the padding as needed
+                            padding: EdgeInsets.only(top: 8.0), 
                             child: Text(
                               'Please refer to the office of the UTeM Treasurer regarding further details on the payment for the Teaching Factory room booking request.',
                               textAlign: TextAlign.center,
