@@ -13,7 +13,6 @@ class GuestDetails {
     required this.children,
   });
 
-  // Convert GuestDetails instance to a JSON map
   Map<String, dynamic> toJson() {
     return {
       'adults': adults,
@@ -33,7 +32,7 @@ class RoomBookingModel {
   final DateTime checkInDateTime;
   final DateTime checkOutDateTime;
   final BookingStatusModel bookingStatus;
-  final GuestDetails? guestsDetails; // Updated for guest details
+  final GuestDetails? guestsDetails;
   final String totalBookingPrice;
 
   RoomBookingModel({
@@ -46,7 +45,7 @@ class RoomBookingModel {
     required this.checkInDateTime,
     required this.checkOutDateTime,
     required this.bookingStatus,
-    this.guestsDetails, // Updated for guest details
+    this.guestsDetails,
     required this.totalBookingPrice,
     this.note,
   });
@@ -70,7 +69,7 @@ class RoomBookingModel {
       )
           : null,
       totalBookingPrice: data['totalBookingPrice'] as String,
-      note: data['note'] as String?, // handle nullable field
+      note: data['note'] as String?,
     );
   }
 
@@ -92,11 +91,10 @@ class RoomBookingModel {
       )
           : null,
       totalBookingPrice: json['totalBookingPrice'] as String,
-      note: json['note'] as String?, // handle nullable field
+      note: json['note'] as String?, 
     );
   }
 
-  // Convert RoomBookingModel instance to a JSON map
   Map<String, dynamic> toJson() {
     return {
       'bookingID': bookingID,
@@ -110,7 +108,7 @@ class RoomBookingModel {
       'bookingStatus': bookingStatus.toJson(),
       'guestsDetails': guestsDetails != null ? guestsDetails!.toJson() : null,
       'totalBookingPrice': totalBookingPrice,
-      'note': note, // include nullable field
+      'note': note, 
     };
   }
 }
