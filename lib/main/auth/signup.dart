@@ -22,7 +22,7 @@ class _SignupState extends State<Signup> {
   final String userID;
 
   _SignupState({required this.userID});
-  //text controllers
+  
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _confirmPasswordController = TextEditingController();
@@ -34,7 +34,7 @@ class _SignupState extends State<Signup> {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
   bool _validateEmail(String email) {
-    // Regular expressions for the accepted email formats
+ 
     final RegExp googleEmail =
     RegExp(r'^[\w.+-]+@gmail\.com$', caseSensitive: false);
     final RegExp utemEmail =
@@ -44,14 +44,14 @@ class _SignupState extends State<Signup> {
     final RegExp yahooEmail =
     RegExp(r'^[\w.+-]+@yahoo\.com$', caseSensitive: false);
 
-    // Check if the email matches any of the accepted formats
+
     if (googleEmail.hasMatch(email) ||
         utemEmail.hasMatch(email) ||
         outlookEmail.hasMatch(email) ||
         yahooEmail.hasMatch(email)) {
-      return true; // Email is valid
+      return true;
     } else {
-      return false; // Email is invalid
+      return false; 
     }
   }
 
@@ -62,14 +62,14 @@ class _SignupState extends State<Signup> {
   }
 
   bool _validatePassword(String password) {
-    // Check if password length is at least 6 characters
+   
     if (password.length < 6) {
       return false;
     }
 
-    // Check for at least one uppercase letter
+   
     bool hasUpperCase = false;
-    // Count the number of uppercase letters
+   
     int upperCaseCount = 0;
     for (int i = 0; i < password.length; i++) {
       if (password[i] == password[i].toUpperCase() && password[i] != password[i].toLowerCase()) {
@@ -78,9 +78,9 @@ class _SignupState extends State<Signup> {
       }
     }
 
-    // Check for at least one lowercase letter
+  
     bool hasLowerCase = false;
-    // Count the number of lowercase letters
+
     int lowerCaseCount = 0;
     for (int i = 0; i < password.length; i++) {
       if (password[i] == password[i].toLowerCase() && password[i] != password[i].toUpperCase()) {
@@ -89,7 +89,7 @@ class _SignupState extends State<Signup> {
       }
     }
 
-    // Check for at least one special character
+   
     bool hasSpecialChar = false;
     String specialChars = r'^ !@#$%^&*()_+{}|:<>?-=[]\;\';
     for (int i = 0; i < password.length; i++) {
@@ -99,20 +99,19 @@ class _SignupState extends State<Signup> {
     }
     }
 
-    // Return true only if all conditions are met
-    // And if the desired count of uppercase and lowercase letters is achieved
+    
     return hasUpperCase && hasLowerCase && hasSpecialChar && upperCaseCount >= 1 && lowerCaseCount >= 1;
   }
 
-  // Validate confirm password
+ 
   bool _validateConfirmPassword(String confirmPassword) {
     return confirmPassword == _passwordController.text;
   }
 
   String hashPassword(String password) {
-    var bytes = utf8.encode(password); // Encode the password to UTF-8
-    var digest = sha256.convert(bytes); // Generate the SHA-256 hash
-    return digest.toString(); // Return the hashed password as a string
+    var bytes = utf8.encode(password);
+    var digest = sha256.convert(bytes);
+    return digest.toString();
   }
 
   void _signup(String userID) async {
@@ -120,7 +119,7 @@ class _SignupState extends State<Signup> {
     String password = _passwordController.text.trim();
 
     try {
-      // Create user with email and password
+     
       await FirebaseAuth.instance.createUserWithEmailAndPassword(
         email: email,
         password: password,
@@ -128,19 +127,19 @@ class _SignupState extends State<Signup> {
 
       String hashedPassword = hashPassword(_passwordController.text);
 
-      // Update user profile with email and hashed password
+    
       await _firestore.collection('usersAccount').doc(userID).update({
         'email': email,
         'password': hashedPassword,
       });
 
-      // Signup successful, navigate to home screen or wherever you want to navigate
+      
       Navigator.push(
         context,
-        MaterialPageRoute(builder: (context) => ButtomNavBar()), // Replace ButtomNavBar() with your desired destination
+        MaterialPageRoute(builder: (context) => ButtomNavBar()), 
       );
     } catch (e) {
-      // Handle signup errors
+    
       print("Signup error: $e");
       Fluttertoast.showToast(
         msg: 'Signup failed',
@@ -198,16 +197,16 @@ class _SignupState extends State<Signup> {
                   Align(
                     alignment: Alignment.centerLeft,
                     child: Padding(
-                      padding: const EdgeInsets.only(left: 40.0), // Adjust the left padding as needed
+                      padding: const EdgeInsets.only(left: 40.0), 
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           const SizedBox(
                               height:
-                              40), // Adjust the space between "Teaching Factory" and the new text
+                              40), 
                           Container(
-                            padding: EdgeInsets.only(left: 0.05), // Adjust the left padding for center-left alignment
-                            width: MediaQuery.of(context).size.width - 80, // Adjust width as needed
+                            padding: EdgeInsets.only(left: 0.05),
+                            width: MediaQuery.of(context).size.width - 80, 
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
@@ -224,7 +223,7 @@ class _SignupState extends State<Signup> {
                                               color: _isEmailValid
                                                   ? shadeColor2
                                                   : Colors
-                                                  .red, // Dynamic border color based on email validity
+                                                  .red, 
                                             ),
                                           ),
                                           focusedBorder: OutlineInputBorder(
@@ -232,7 +231,7 @@ class _SignupState extends State<Signup> {
                                               color: _isEmailValid
                                                   ? shadeColor2
                                                   : Colors
-                                                  .red, // Dynamic border color based on email validity
+                                                  .red,
                                             ),
                                             borderRadius: BorderRadius.circular(12),
                                           ),
@@ -260,17 +259,17 @@ class _SignupState extends State<Signup> {
                                   Padding(
                                     padding: const EdgeInsets.only(
                                         left: 10.0,
-                                        top: 5.0), // Adjust padding as needed
+                                        top: 5.0),
                                     child: Text(
                                       'Invalid email format',
                                       style: TextStyle(
-                                        color: Colors.red, // Adjust color as needed
-                                        fontSize: 12, // Adjust font size as needed
+                                        color: Colors.red, 
+                                        fontSize: 12,
                                       ),
                                     ),
                                   ),
                                 const SizedBox(height: 12),
-                                // Password TextField
+                               
                                 Row(
                                   children: [
                                     SizedBox(width: 10),
@@ -327,9 +326,9 @@ class _SignupState extends State<Signup> {
                                       ),
                                     ),
                                   ),
-                                const SizedBox(height: 12), // Add space below the text
+                                const SizedBox(height: 12), 
 
-                                // Confirm Password TextField
+                              
                                 Row(
                                   children: [
                                     SizedBox(width: 10),
@@ -385,16 +384,16 @@ class _SignupState extends State<Signup> {
                           ),
                         const SizedBox(height: 20),
                           Padding(
-                            padding: const EdgeInsets.only(left: 10.0), // Adjust the left padding as needed
+                            padding: const EdgeInsets.only(left: 10.0), 
                             child: ElevatedButton(
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: shadeColor4,
-                                padding: EdgeInsets.symmetric(vertical: 16, horizontal: 130), // Adjust padding for size
+                                padding: EdgeInsets.symmetric(vertical: 16, horizontal: 130), 
                                 shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(44), // Adjust border radius
-                                  side: BorderSide(color: shadeColor1, width: 2), // Border color and width
+                                  borderRadius: BorderRadius.circular(44),
+                                  side: BorderSide(color: shadeColor1, width: 2),
                                 ),
-                                elevation: 5, // Shadow
+                                elevation: 5, 
                               ),
                               onPressed: () async {
                                 _signup(widget.userID);
@@ -406,13 +405,13 @@ class _SignupState extends State<Signup> {
                                   fontWeight: FontWeight.bold,
                                   fontSize: 18,
                                   color: Colors.white,
-                                ), // Text style
+                                ),
                               ),
                             ),
                           ),
-                          const SizedBox(height: 25), // Add space below the button
+                          const SizedBox(height: 25),
                           Padding(
-                            padding: const EdgeInsets.only(left: 65.0), // Adjust the left padding as needed
+                            padding: const EdgeInsets.only(left: 65.0),
                             child: Row(
                               children: [
                                 Text(
@@ -426,7 +425,7 @@ class _SignupState extends State<Signup> {
                                   onTap: () {
                                     Navigator.push(
                                       context,
-                                      MaterialPageRoute(builder: (context) => Login()), // Replace LoginPage with your actual login page widget.
+                                      MaterialPageRoute(builder: (context) => Login()),
                                     );
                                   },
                                   child: Text(
