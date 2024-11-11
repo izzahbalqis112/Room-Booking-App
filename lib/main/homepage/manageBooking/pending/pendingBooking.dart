@@ -23,14 +23,12 @@ class _PendingBookingPageState extends State<PendingBookingPage> {
 
 
   Future<List<DocumentSnapshot>> _fetchPendingBookings() async {
-    // Get the current user's email
     String? currentUserEmail = FirebaseAuth.instance.currentUser?.email;
 
-    // Query Firestore for pending bookings belonging to the current user
     QuerySnapshot snapshot = await FirebaseFirestore.instance
         .collection('roomBookingData')
         .where('bookingStatus.status', isEqualTo: 'Pending')
-        .where('user.email', isEqualTo: currentUserEmail) // Filter by user email
+        .where('user.email', isEqualTo: currentUserEmail) 
         .get();
 
     return snapshot.docs;
@@ -92,7 +90,6 @@ class ContainerWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Extract data from the booking document
     var displayBookingID = booking['displayBookingID'] ?? '';
     var roomName = booking['room']['name'] ?? '';
     var pendingStatus = booking['bookingStatus']['status'] ?? '';
@@ -110,7 +107,6 @@ class ContainerWidget extends StatelessWidget {
     DecorationImage? backgroundImage;
 
     if (roomImages.isNotEmpty) {
-      // Assuming you want to use the first image in the list
       String imageUrl = roomImages[0];
       backgroundImage = DecorationImage(
         image: CachedNetworkImageProvider(imageUrl),
@@ -120,21 +116,16 @@ class ContainerWidget extends StatelessWidget {
 
     Future<void> _deleteBooking(BuildContext context) async {
       try {
-        // Get a reference to the document to be deleted
         final bookingRef = FirebaseFirestore.instance.collection('roomBookingData').doc(booking.id);
 
-        // Delete the document from Firestore
         await bookingRef.delete();
 
-        // Reload the list of pending bookings
         reloadPendingBookings();
 
-        // Show a success message or perform any other UI update
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('Booking deleted successfully')),
         );
       } catch (error) {
-        // Handle any errors that occur during deletion
         print('Error deleting booking: $error');
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('Failed to delete booking')),
@@ -145,7 +136,6 @@ class ContainerWidget extends StatelessWidget {
 
     return  GestureDetector(
       onDoubleTap: () {
-        // Show confirmation dialog
         showDialog(
           context: context,
           builder: (context) => AlertDialog(
@@ -292,13 +282,13 @@ class ContainerWidget extends StatelessWidget {
                     MaterialPageRoute(
                       builder: (context) => ViewMoreSelectedBookingIDDetailsPage(
                         bookingId: booking.id,
-                        reloadPendingBookings: reloadPendingBookings, // Pass the reload function to ViewMoreSelectedBookingIDDetailsPage
+                        reloadPendingBookings: reloadPendingBookings, 
                       ),
                     ),
                   );
                 },
                 child: Text(
-                  'View More >', //click text button and go to the view selected booking details
+                  'View More >',
                   style: TextStyle(
                     fontSize: 14,
                     fontWeight: FontWeight.bold,
@@ -372,8 +362,8 @@ class HorizontalLine extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 1.0, // Height is 1.0 for a horizontal line
-      width: width, // Adjust the width of the line as needed
+      height: 1.0, 
+      width: width, 
       color: color,
     );
   }
