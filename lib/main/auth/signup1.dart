@@ -16,7 +16,6 @@ class Signup1 extends StatefulWidget {
 }
 
 class _Signup1State extends State<Signup1> {
-  //text controllers
   final TextEditingController _firstNameController = TextEditingController();
   final TextEditingController _lastNameController = TextEditingController();
   final TextEditingController _companyNameController = TextEditingController();
@@ -34,8 +33,6 @@ class _Signup1State extends State<Signup1> {
     return value.isNotEmpty;
   }
 
-
-  //memory control
   @override
   void dispose() {
     _firstNameController.dispose();
@@ -84,13 +81,13 @@ class _Signup1State extends State<Signup1> {
                   Align(
                     alignment: Alignment.centerLeft,
                     child: Padding(
-                      padding: const EdgeInsets.only(left: 40.0), // Adjust the left padding as needed
+                      padding: const EdgeInsets.only(left: 40.0),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           const SizedBox(
                               height:
-                              40), // Adjust the space between "Teaching Factory" and the new text
+                              40),
                           Text(
                             "Fill in your information",
                             style: TextStyle(
@@ -99,10 +96,10 @@ class _Signup1State extends State<Signup1> {
                               fontWeight: FontWeight.normal,
                             ),
                           ),
-                          const SizedBox(height: 20), // Add space below the text
+                          const SizedBox(height: 20), 
                           Container(
-                            padding: EdgeInsets.only(left: 0.05), // Adjust the left padding for center-left alignment
-                            width: MediaQuery.of(context).size.width - 80, // Adjust width as needed
+                            padding: EdgeInsets.only(left: 0.05),
+                            width: MediaQuery.of(context).size.width - 80, 
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
@@ -184,7 +181,7 @@ class _Signup1State extends State<Signup1> {
                                           filled: true,
                                         ),
                                         onChanged: (value) {
-                                          // No validation needed for last name
+                                          
                                         },
                                         keyboardType: TextInputType.text,
                                         inputFormatters: [
@@ -194,7 +191,7 @@ class _Signup1State extends State<Signup1> {
                                     ),
                                   ],
                                 ),
-                                const SizedBox(height: 12), // Add space below the text
+                                const SizedBox(height: 12), 
 
                                 Row(
                                   children: [
@@ -249,12 +246,12 @@ class _Signup1State extends State<Signup1> {
                                   ),
                                 const SizedBox(height: 12),
                                 Container(
-                                  padding: EdgeInsets.only(left: 1.0), // Adjust padding as needed
-                                  width: MediaQuery.of(context).size.width - 80, // Adjust width as needed
+                                  padding: EdgeInsets.only(left: 1.0),
+                                  width: MediaQuery.of(context).size.width - 80,
                                   decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(32),
                                     border: Border.all(
-                                      color: _isPhoneNumberValid ? shadeColor2 : Colors.red, // Change border color based on validation
+                                      color: _isPhoneNumberValid ? shadeColor2 : Colors.red,
                                     ),
                                     color: Colors.white,
                                   ),
@@ -276,12 +273,12 @@ class _Signup1State extends State<Signup1> {
                                           ),
                                           ignoreBlank: false,
                                           selectorTextStyle: TextStyle(color: Colors.black),
-                                          initialValue: PhoneNumber(isoCode: 'MY'), // Default country code (Malaysia)
+                                          initialValue: PhoneNumber(isoCode: 'MY'),
                                           countries: ['AD', 'AE', 'AF', 'AG', 'AI', 'AL', 'AM', 'AO', 'AQ', 'AR', 'AS', 'AT', 'AU', 'AW', 'AX', 'AZ', 'BA', 'BB', 'BD', 'BE', 'BF', 'BG', 'BH', 'BI', 'BJ', 'BL', 'BM', 'BN', 'BO', 'BQ', 'BR', 'BS', 'BT', 'BV', 'BW', 'BY', 'BZ', 'CA', 'CC', 'CD', 'CF', 'CG', 'CH', 'CI', 'CK', 'CL', 'CM', 'CN', 'CO', 'CR', 'CU', 'CV', 'CW', 'CX', 'CY', 'CZ', 'DE', 'DJ', 'DK', 'DM', 'DO', 'DZ', 'EC', 'EE', 'EG', 'EH', 'ER', 'ES', 'ET', 'FI', 'FJ', 'FK', 'FM', 'FO', 'FR', 'GA', 'GB', 'GD', 'GE', 'GF', 'GG', 'GH', 'GI', 'GL', 'GM', 'GN', 'GP', 'GQ', 'GR', 'GS', 'GT', 'GU', 'GW', 'GY', 'HK', 'HM', 'HN', 'HR', 'HT', 'HU', 'ID', 'IE', 'IL', 'IM', 'IN', 'IO', 'IQ', 'IR', 'IS', 'IT', 'JE', 'JM', 'JO', 'JP', 'KE', 'KG', 'KH', 'KI', 'KM', 'KN', 'KP', 'KR', 'KW', 'KY', 'KZ', 'LA', 'LB', 'LC', 'LI', 'LK', 'LR', 'LS', 'LT', 'LU', 'LV', 'LY', 'MA', 'MC', 'MD', 'ME', 'MF', 'MG', 'MH', 'MK', 'ML', 'MM', 'MN', 'MO', 'MP', 'MQ', 'MR', 'MS', 'MT', 'MU', 'MV', 'MW', 'MX', 'MY', 'MZ', 'NA', 'NC', 'NE', 'NF', 'NG', 'NI', 'NL', 'NO', 'NP', 'NR', 'NU', 'NZ', 'OM', 'PA', 'PE', 'PF', 'PG', 'PH', 'PK', 'PL', 'PM', 'PN', 'PR', 'PS', 'PT', 'PW', 'PY', 'QA', 'RE', 'RO', 'RS', 'RU', 'RW', 'SA', 'SB', 'SC', 'SD', 'SE', 'SG', 'SH', 'SI', 'SJ', 'SK', 'SL', 'SM', 'SN', 'SO', 'SR', 'SS', 'ST', 'SV', 'SX', 'SY', 'SZ', 'TC', 'TD', 'TF', 'TG', 'TH', 'TJ', 'TK', 'TL', 'TM', 'TN', 'TO', 'TR', 'TT', 'TV', 'TW', 'TZ', 'UA', 'UG', 'UM', 'US', 'UY', 'UZ', 'VA', 'VC', 'VE', 'VG', 'VI', 'VN', 'VU', 'WF', 'WS', 'YE', 'YT', 'ZA', 'ZM', 'ZW'], // List of supported countries
-                                          formatInput: true, // Formats input based on country code
-                                          keyboardType: TextInputType.phone, // You can adjust the keyboard type as needed
+                                          formatInput: true,
+                                          keyboardType: TextInputType.phone, 
                                           inputDecoration: InputDecoration(
-                                            border: InputBorder.none, // Remove underline
+                                            border: InputBorder.none,
                                             hintText: 'Phone number',
                                             hintStyle: TextStyle(color: Colors.grey),
                                             contentPadding: EdgeInsets.symmetric(vertical: 18, horizontal: 0.9),
@@ -311,13 +308,13 @@ class _Signup1State extends State<Signup1> {
                           Column(
                             mainAxisAlignment: MainAxisAlignment.start,
                             children: [
-                              const SizedBox(height: 20), // Adjust space as needed
+                              const SizedBox(height: 20),
                               ElevatedButton(
                                 style: ElevatedButton.styleFrom(
                                   backgroundColor: shadeColor4,
                                   shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(
-                                          44), // Adjust border radius
+                                          44),
                                       side: BorderSide(
                                           color: shadeColor1,
                                           width: 2),
@@ -325,20 +322,20 @@ class _Signup1State extends State<Signup1> {
                                   elevation: 5,
                                 ),
                                   onPressed: () async {
-                                  // Validate input fields
+                                  
                                   setState(() {
                                     _isFirstNameValid = _firstNameController.text.isNotEmpty;
                                     _isCompanyNameValid = _companyNameController.text.isNotEmpty;
                                     _isPhoneNumberValid = _phoneNumber != null && _phoneNumber!.isNotEmpty;
                                   });
 
-                                  // Check if all fields are valid
+                                 
                                   if (_isFirstNameValid && _isCompanyNameValid && _isPhoneNumberValid) {
                                     try {
 
                                       String userID = Uuid().v4();
 
-                                      // Create UserModel object
+                                      
                                       UserModel userModel = UserModel(
                                         firstName: _firstNameController.text,
                                         lastName: _lastNameController.text,
@@ -350,7 +347,7 @@ class _Signup1State extends State<Signup1> {
                                         picture: '',
                                       );
 
-                                      // Define user profile data
+                                      
                                       Map<String, dynamic> userProfileData = {
                                         'firstName': userModel.firstName,
                                         'lastName': userModel.lastName,
@@ -362,7 +359,7 @@ class _Signup1State extends State<Signup1> {
                                         'password': userModel.password,
                                       };
 
-                                      // Save user data to Firestore with the user ID as the document ID
+                                     
                                       await _firestore.collection('usersAccount').doc(userModel.userID).set(userProfileData);
 
                                       Navigator.push(
@@ -370,7 +367,7 @@ class _Signup1State extends State<Signup1> {
                                         MaterialPageRoute(builder: (context) => Signup(userID: userModel.userID)),
                                       );
                                     } catch (e) {
-                                      // Handle any errors that occur during user account creation or Firestore data saving
+                                      
                                       print('Error creating user account or saving data to Firestore: $e');
                                       Fluttertoast.showToast(
                                         msg: 'Error: $e',
@@ -378,7 +375,7 @@ class _Signup1State extends State<Signup1> {
                                       );
                                     }
                                   } else {
-                                    // Display error message or handle invalid input fields
+                                   
                                     Fluttertoast.showToast(
                                       msg: 'Please fill in all required fields.',
                                       gravity: ToastGravity.BOTTOM,
