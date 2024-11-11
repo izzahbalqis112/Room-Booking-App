@@ -18,7 +18,7 @@ class _ButtomNavBarState extends State<ButtomNavBar> {
     HomePage(),
     BookingHistoryPage(initialTabIndex: 0),
     MorePage(),
-    Profile(), //buat another method untuk part ni. kalau user login guna staff, die gi kat staff profile page
+    Profile(),
   ];
 
   @override
