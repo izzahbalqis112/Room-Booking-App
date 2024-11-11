@@ -7,7 +7,6 @@ import '../../../../assets/Colors.dart';
 import '../paymentMethod/popOutMessage.dart';
 
 class ConfirmBookingPage extends StatefulWidget {
-
   @override
   _ConfirmBookingPageState createState() => _ConfirmBookingPageState();
 }
@@ -22,16 +21,12 @@ class _ConfirmBookingPageState extends State<ConfirmBookingPage> {
   }
 
   Future<List<DocumentSnapshot>> _fetchConfirmBookings() async {
-    // Get the current user's email
     String? currentUserEmail = FirebaseAuth.instance.currentUser?.email;
-
-    // Query Firestore for pending bookings belonging to the current user
     QuerySnapshot snapshot = await FirebaseFirestore.instance
         .collection('roomBookingData')
         .where('bookingStatus.status', isEqualTo: 'Confirmed')
-        .where('user.email', isEqualTo: currentUserEmail) // Filter by user email
+        .where('user.email', isEqualTo: currentUserEmail)
         .get();
-
     return snapshot.docs;
   }
 
@@ -47,19 +42,15 @@ class _ConfirmBookingPageState extends State<ConfirmBookingPage> {
         'bookingStatus.sortOrder': '5',
         'bookingStatus.active': 'true',
       });
-
-      // Reload the page
       setState(() {
         _ConfirmBookingsFuture = _fetchConfirmBookings();
       });
-
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (context) => UploadPage()),
       );
     } catch (error) {
       print('Error updating booking status: $error');
-      // Handle error
     }
   }
 
@@ -100,7 +91,6 @@ class _ConfirmBookingPageState extends State<ConfirmBookingPage> {
   }
 }
 
-
 class ContainerWidget extends StatelessWidget {
   final DocumentSnapshot booking;
   final Function(String) onToPayStatus;
@@ -113,33 +103,25 @@ class ContainerWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Extract data from the booking document
     var displayBookingID = booking['displayBookingID'] ?? '';
     var roomName = booking['room']['name'] ?? '';
     var pendingStatus = booking['bookingStatus']['status'] ?? '';
     var totalPrice = booking['totalBookingPrice'] ?? 0;
     var checkInDate = DateTime.parse(booking['checkInDateTime'] as String).toLocal();
     var checkOutDate = DateTime.parse(booking['checkOutDateTime'] as String).toLocal();
-
     var checkInDateNoTime = DateTime(checkInDate.year, checkInDate.month, checkInDate.day);
     var checkOutDateNoTime = DateTime(checkOutDate.year, checkOutDate.month, checkOutDate.day);
-
     var numberOfDays = checkOutDateNoTime.difference(checkInDateNoTime).inDays;
-
-
     List<dynamic> roomImages = booking['room']['images'] ?? [];
     DecorationImage? backgroundImage;
-
     if (roomImages.isNotEmpty) {
-      // Assuming you want to use the first image in the list
       String imageUrl = roomImages[0];
       backgroundImage = DecorationImage(
         image: CachedNetworkImageProvider(imageUrl),
         fit: BoxFit.cover,
       );
     }
-
-    return  Container(
+    return Container(
       width: 500,
       height: 280,
       decoration: BoxDecoration(
@@ -255,7 +237,7 @@ class ContainerWidget extends StatelessWidget {
           Positioned(
             top: 130,
             left: 130,
-            child: TextButton( // Use TextButton for button appearance
+            child: TextButton(
               onPressed: () {
                 Navigator.push(
                   context,
@@ -267,7 +249,7 @@ class ContainerWidget extends StatelessWidget {
                 );
               },
               child: Text(
-                'View More >', //click text button and go to the view selected booking details
+                'View More >',
                 style: TextStyle(
                   fontSize: 14,
                   fontWeight: FontWeight.bold,
@@ -312,7 +294,7 @@ class ContainerWidget extends StatelessWidget {
                   style: ElevatedButton.styleFrom(
                     backgroundColor: shadeColor6,
                   ),
-                  child: Text('To Pay', style: TextStyle(color: Colors.white),),
+                  child: Text('To Pay', style: TextStyle(color: Colors.white)),
                 ),
               ],
             ),
@@ -332,8 +314,8 @@ class HorizontalLine extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 1.0, // Height is 1.0 for a horizontal line
-      width: width, // Adjust the width of the line as needed
+      height: 1.0,
+      width: width,
       color: color,
     );
   }
