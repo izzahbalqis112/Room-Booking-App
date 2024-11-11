@@ -22,10 +22,9 @@ class _CompletedBookingPageState extends State<CompletedBookingPage> {
   }
 
   Future<List<DocumentSnapshot>> _fetchCompletedBookings() async {
-    // Get the current user's email
+   
     String? currentUserEmail = FirebaseAuth.instance.currentUser?.email;
 
-    // Query Firestore for completed bookings belonging to the current user
     QuerySnapshot snapshot = await FirebaseFirestore.instance
         .collection('roomBookingData')
         .where('bookingStatus.status', isEqualTo: 'Completed')
@@ -39,7 +38,6 @@ class _CompletedBookingPageState extends State<CompletedBookingPage> {
     try {
       DocumentReference bookingRef = FirebaseFirestore.instance.collection('roomBookingData').doc(bookingId);
 
-      // Update bookingRatings field
       await bookingRef.set({
         'bookingRatings': {
           'userRating': _userRating,
@@ -48,7 +46,6 @@ class _CompletedBookingPageState extends State<CompletedBookingPage> {
         }
       }, SetOptions(merge: true));
 
-      // Reload the page
       setState(() {
         _CompletedBookingsFuture = _fetchCompletedBookings();
       });
@@ -201,7 +198,7 @@ class _CompletedBookingPageState extends State<CompletedBookingPage> {
               itemCount: bookings.length,
               itemBuilder: (context, index) {
                 DocumentSnapshot booking = bookings[index];
-                var bookingData = booking.data() as Map<String, dynamic>; // Cast to Map<String, dynamic>
+                var bookingData = booking.data() as Map<String, dynamic>;
                 bool hasRated = bookingData['bookingRatings'] != null;
                 return Column(
                   children: [
@@ -232,7 +229,6 @@ class ContainerWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Extract data from the booking document
     var displayBookingID = booking['displayBookingID'] ?? '';
     var roomName = booking['room']['name'] ?? '';
     var status = booking['bookingStatus']['status'] ?? '';
@@ -249,7 +245,6 @@ class ContainerWidget extends StatelessWidget {
     DecorationImage? backgroundImage;
 
     if (roomImages.isNotEmpty) {
-      // Assuming you want to use the first image in the list
       String imageUrl = roomImages[0];
       backgroundImage = DecorationImage(
         image: CachedNetworkImageProvider(imageUrl),
