@@ -19,7 +19,6 @@ class _CancelledBookingPageState extends State<CancelledBookingPage> {
   }
 
   Future<List<DocumentSnapshot>> _fetchCancelBooked() async {
-    // Get the current user's email
     String? currentUserEmail = FirebaseAuth.instance.currentUser?.email;
 
     QuerySnapshot snapshot = await FirebaseFirestore.instance
@@ -105,7 +104,6 @@ class ContainerWidget extends StatelessWidget {
     DecorationImage? backgroundImage;
 
     if (roomImages.isNotEmpty) {
-      // Assuming you want to use the first image in the list
       String imageUrl = roomImages[0];
       backgroundImage = DecorationImage(
         image: CachedNetworkImageProvider(imageUrl),
@@ -285,8 +283,8 @@ class HorizontalLine extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 1.0, // Height is 1.0 for a horizontal line
-      width: width, // Adjust the width of the line as needed
+      height: 1.0, 
+      width: width, 
       color: color,
     );
   }
