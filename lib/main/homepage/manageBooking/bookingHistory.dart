@@ -41,12 +41,11 @@ class _BookingHistoryPageState extends State<BookingHistoryPage> with SingleTick
           "My Booking Details",
           style: TextStyle(
             color: shadeColor6,
-            fontWeight: FontWeight.bold, // Making the text bold
+            fontWeight: FontWeight.bold, 
           ),
-          textAlign: TextAlign.center, // Centering the text
+          textAlign: TextAlign.center,
         ),
         centerTitle: true,
-        // Centering the title in the app bar
         elevation: 0,
         automaticallyImplyLeading: false,
         bottom: TabBar(
