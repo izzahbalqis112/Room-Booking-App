@@ -51,7 +51,6 @@ class _ProfileState extends State<Profile> {
           .get();
 
       if (userDataSnapshot.docs.isNotEmpty) {
-        // Retrieve user data
         Map<String, dynamic> userData = (userDataSnapshot.docs.first.data() as Map<String, dynamic>);
         setState(() {
           _userProfileData = userData;
@@ -67,37 +66,24 @@ class _ProfileState extends State<Profile> {
 
   void _handleDeletePressed() async {
     try {
-      // Get the user's email
       String? userEmail = _currentUser.email;
 
-      // Query the user document based on the email
       QuerySnapshot userQuerySnapshot = await FirebaseFirestore.instance
           .collection('usersAccount')
           .where('email', isEqualTo: userEmail)
           .limit(1)
           .get();
 
-      // Check if the user document exists
       if (userQuerySnapshot.docs.isNotEmpty) {
-        // Get the user document reference
         DocumentReference userDocRef = userQuerySnapshot.docs.first.reference;
-
-        // Delete the user document
         await userDocRef.delete();
-
-        // Delete the user's account
         await _currentUser.delete();
-
-        // Sign out the user after deletion
         await _auth.signOut();
-
-        // Navigate to the login screen
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(builder: (context) => Login()),
         );
       } else {
-        // User document does not exist
         print('User document not found.');
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
@@ -107,8 +93,6 @@ class _ProfileState extends State<Profile> {
       }
     } catch (e) {
       print('Error deleting user account: $e');
-
-      // Show error message to the user
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text('Failed to delete account. Please try again later.'),
@@ -127,7 +111,7 @@ class _ProfileState extends State<Profile> {
           actions: <Widget>[
             TextButton(
               onPressed: () {
-                Navigator.of(context).pop(); // Close the dialog
+                Navigator.of(context).pop(); 
               },
               child: Text(
                 "Cancel",
@@ -136,9 +120,8 @@ class _ProfileState extends State<Profile> {
             ),
             TextButton(
               onPressed: () {
-                // Perform the delete operation
                 _handleDeletePressed();
-                Navigator.of(context).pop(); // Close the dialog
+                Navigator.of(context).pop(); 
               },
               child: Text(
                 "Delete",
@@ -160,7 +143,7 @@ class _ProfileState extends State<Profile> {
 
   Widget _buildLoadingScreen() {
     return Center(
-      child: CircularProgressIndicator(), // Display a circular progress indicator while loading
+      child: CircularProgressIndicator(), 
     );
   }
 
@@ -178,8 +161,8 @@ class _ProfileState extends State<Profile> {
                   bottomRight: Radius.circular(60.0),
                 ),
                 border: Border.all(
-                  color: shadeColor2, // Change the color as needed
-                  width: 2.0, // Change the width as needed
+                  color: shadeColor2,
+                  width: 2.0, 
                 ),
               ),
             ),
@@ -205,8 +188,8 @@ class _ProfileState extends State<Profile> {
         ),
         SizedBox(height: 20),
         Positioned(
-          top: MediaQuery.of(context).size.height * 0.22 - 100+ 220 + 86, // Adjust the top position accordingly
-          left: MediaQuery.of(context).size.width * 0.06, // Adjust the left position accordingly
+          top: MediaQuery.of(context).size.height * 0.22 - 100+ 220 + 86, 
+          left: MediaQuery.of(context).size.width * 0.06, 
           child: Container(
             width: MediaQuery.of(context).size.width * 0.89,
             height: MediaQuery.of(context).size.height * 0.15,
@@ -215,8 +198,8 @@ class _ProfileState extends State<Profile> {
               color: Colors.white,
               borderRadius: BorderRadius.circular(10),
               border: Border.all(
-                color: shadeColor2.withOpacity(0.5), // Set the border color here
-                width: 2, // Set the border width as needed
+                color: shadeColor2.withOpacity(0.5), 
+                width: 2,
               ),
               boxShadow: [
                 BoxShadow(
@@ -228,7 +211,7 @@ class _ProfileState extends State<Profile> {
               ],
             ),
             child: Padding(
-              padding: const EdgeInsets.only(left: 0.05), // Adjust the left padding as needed
+              padding: const EdgeInsets.only(left: 0.05),
               child: Column(
                 children: [
                   _userDataView1(),
@@ -239,8 +222,8 @@ class _ProfileState extends State<Profile> {
         ),
         SizedBox(height: 20),
         Positioned(
-          top: MediaQuery.of(context).size.height * 0.22 - 100 + 220 + 100 + MediaQuery.of(context).size.height * 0.15 + 20, // Adjust the top position accordingly
-          left: MediaQuery.of(context).size.width * 0.126, // Adjust the left position accordingly
+          top: MediaQuery.of(context).size.height * 0.22 - 100 + 220 + 100 + MediaQuery.of(context).size.height * 0.15 + 20,
+          left: MediaQuery.of(context).size.width * 0.126,
           child: Row(
             children: [
               ElevatedButton(
@@ -256,7 +239,7 @@ class _ProfileState extends State<Profile> {
                         44),
                     side: BorderSide(
                         color: shadeColor1,
-                        width: 2), // Border color and width
+                        width: 2),
                   ),
                 ),
                 onPressed: () async {
@@ -267,7 +250,6 @@ class _ProfileState extends State<Profile> {
                     ),
                   );
                   if (result == true) {
-                    // Refresh the user profile data
                     await fetchAndDisplayUserData(_currentUser.email!);
                   }
                 },
@@ -278,7 +260,7 @@ class _ProfileState extends State<Profile> {
                   ),
                 ),
               ),
-              SizedBox(width: 10), // Add some space between buttons
+              SizedBox(width: 10),
               ElevatedButton(
                 style: ElevatedButton.styleFrom(
                   padding: EdgeInsets.symmetric(
@@ -292,7 +274,7 @@ class _ProfileState extends State<Profile> {
                         44),
                     side: BorderSide(
                         color: shadeColor1,
-                        width: 2), // Border color and width
+                        width: 2), 
                   ),
                 ),
                 onPressed: () {
@@ -328,7 +310,7 @@ class _ProfileState extends State<Profile> {
                   image: DecorationImage(
                     fit: BoxFit.cover,
                     image: photoUrl != null && photoUrl.isNotEmpty
-                        ? NetworkImage(photoUrl) // Use the updated image URL
+                        ? NetworkImage(photoUrl) 
                         : AssetImage('lib/assets/img/user.jpeg') as ImageProvider,
                   ),
                 ),
@@ -351,7 +333,7 @@ class _ProfileState extends State<Profile> {
                       ).then((value) {
                         if (value != null) {
                           setState(() {
-                            _userProfileData?['picture'] = value; // Update _userProfileData with the new photo URL
+                            _userProfileData?['picture'] = value; 
                           });
                         }
                       });
@@ -402,14 +384,14 @@ class _ProfileState extends State<Profile> {
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            SizedBox(width: 10.0), // Add some initial space
+            SizedBox(width: 10.0), 
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.start, // Align text to the left
+                  mainAxisAlignment: MainAxisAlignment.start, 
                   children: [
-                    Icon(Icons.email, size: 20.0, color: Colors.black), // Email icon
+                    Icon(Icons.email, size: 20.0, color: Colors.black), 
                     SizedBox(width: 5.0),
                     Text(
                       'Email : ',
@@ -423,9 +405,9 @@ class _ProfileState extends State<Profile> {
                 ),
                 SizedBox(height: 10.0),
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.start, // Align text to the left
+                  mainAxisAlignment: MainAxisAlignment.start, 
                   children: [
-                    Icon(Icons.phone, size: 20.0, color: Colors.black), // Phone icon
+                    Icon(Icons.phone, size: 20.0, color: Colors.black),
                     SizedBox(width: 5.0),
                     Text(
                       'Phone Number : ',
@@ -439,7 +421,7 @@ class _ProfileState extends State<Profile> {
                 ),
               ],
             ),
-            SizedBox(width: 10.0), // Add some final space
+            SizedBox(width: 10.0), 
           ],
         ),
       );
