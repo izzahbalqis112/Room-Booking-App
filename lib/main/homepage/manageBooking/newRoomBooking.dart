@@ -40,7 +40,6 @@ class _NewRoomBookingPageState extends State<NewRoomBookingPage> with TickerProv
   int _numberOfChildren = 0;
   Timestamp dateTimeBookingMade = Timestamp.now();
   late String displayBookingID;
-  // Controllers for the TextFields
   TextEditingController _adultsController = TextEditingController();
   TextEditingController _childrenController = TextEditingController();
   TextEditingController _userNote = TextEditingController();
@@ -48,7 +47,7 @@ class _NewRoomBookingPageState extends State<NewRoomBookingPage> with TickerProv
   @override
   void initState() {
     super.initState();
-    _userNote = TextEditingController(text: ''); // Initialize with empty text
+    _userNote = TextEditingController(text: ''); 
     _adultsController.text = '0';
     _childrenController.text = '0';
     _loadRoomData();
@@ -94,7 +93,6 @@ class _NewRoomBookingPageState extends State<NewRoomBookingPage> with TickerProv
           .get();
 
       if (userDataSnapshot.docs.isNotEmpty) {
-        // Retrieve user data
         Map<String, dynamic> userData = (userDataSnapshot.docs.first.data() as Map<String, dynamic>);
         setState(() {
           _userProfileData = userData;
@@ -130,7 +128,6 @@ class _NewRoomBookingPageState extends State<NewRoomBookingPage> with TickerProv
           ),
         );
 
-        // Extract numeric value from formatted roomPrice
         String formattedRoomPrice = data['roomPrice'];
         double roomPrice = 0.0;
         if (formattedRoomPrice.startsWith('RM ')) {
@@ -144,7 +141,7 @@ class _NewRoomBookingPageState extends State<NewRoomBookingPage> with TickerProv
           about: data['about'],
           capacity: data['capacity'],
           roomStatus: roomStatus1,
-          roomPrice: roomPrice, // Store the numeric value
+          roomPrice: roomPrice,
           roomFacilities: roomFacilities,
           roomArea: data['roomArea'],
         );
@@ -160,45 +157,40 @@ class _NewRoomBookingPageState extends State<NewRoomBookingPage> with TickerProv
       firstDate: DateTime.now(),
       lastDate: DateTime(2101),
       selectableDayPredicate: (DateTime date) {
-        // Disable weekends (Saturday and Sunday)
         return !(date.weekday == 6 || date.weekday == 7);
       },
     );
     if (pickedDate != null) {
       final TimeOfDay? pickedTime = await showTimePicker(
         context: context,
-        initialTime: TimeOfDay(hour: 8, minute: 0), // Set initial time to 8am
+        initialTime: TimeOfDay(hour: 8, minute: 0), 
       );
       if (pickedTime != null) {
         DateTime selectedDateTime = DateTime(pickedDate.year, pickedDate.month, pickedDate.day, pickedTime.hour, pickedTime.minute);
-        if (selectedDateTime.hour >= 8 && selectedDateTime.hour <= 17) { // Check if time is between 8am and 5pm
+        if (selectedDateTime.hour >= 8 && selectedDateTime.hour <= 17) { 
           if (isCheckIn) {
             setState(() {
               _checkInDateTime = selectedDateTime;
               _calculateTotalPrice();
             });
           } else {
-            // Ensure checkout date and time are after check-in date and time
             if (selectedDateTime.isAfter(_checkInDateTime!)) {
               setState(() {
                 _checkOutDateTime = selectedDateTime;
                 _calculateTotalPrice();
               });
             } else {
-              // Show an error message or handle the case where checkout is before check-in
               ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                 content: Text("Checkout date and time must be after check-in date and time"),
               ));
             }
           }
         } else {
-          // Show an error message if the selected time is not between 8am and 5pm
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
             content: Text("Please select a time between 8am and 5pm"),
           ));
         }
       } else {
-        // Show an error message if time picker was dismissed without selecting a time
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           content: Text("Please select a time"),
         ));
@@ -211,24 +203,19 @@ class _NewRoomBookingPageState extends State<NewRoomBookingPage> with TickerProv
       RoomsModel? roomData = await _roomData;
 
       if (roomData != null) {
-        // Calculate the difference in days between check-in and check-out dates
         int numberOfDays = _checkOutDateTime!.difference(_checkInDateTime!).inDays;
 
-        // If the check-out time is after the check-in time on the same day, count it as an additional day
         if (_checkOutDateTime!.isAfter(DateTime(_checkInDateTime!.year, _checkInDateTime!.month, _checkInDateTime!.day))) {
           numberOfDays++;
         }
 
-        // Calculate total price based on number of days and room price
         double totalPrice = numberOfDays * roomData.roomPrice;
 
-        // Check if the duration is less than 24 hours for a single day booking
         if (numberOfDays == 1 && _checkOutDateTime!.difference(_checkInDateTime!).inHours < 24) {
-          totalPrice = roomData.roomPrice; // Set total price to room price
+          totalPrice = roomData.roomPrice;
         }
 
         setState(() {
-          // Format totalPrice to have two decimal places
           _totalPrice = double.parse(totalPrice.toStringAsFixed(2));
         });
       }
@@ -256,27 +243,21 @@ class _NewRoomBookingPageState extends State<NewRoomBookingPage> with TickerProv
   }
 
   String generateDisplayBookingID() {
-    // Generate a UUID
     String uuid = Uuid().v4();
 
-    // Extract numerical part of the UUID
     String numericalPart = uuid.replaceAll(RegExp(r'[^0-9]'), '');
 
-    // If the numerical part is longer than 4 digits, truncate it
     if (numericalPart.length > 4) {
       numericalPart = numericalPart.substring(0, 4);
     }
 
-    // Pad numerical part with leading zeros to ensure it's exactly 4 digits long
     String paddedNumericalPart = numericalPart.padLeft(4, '0');
 
-    // Concatenate "#" symbol with padded numerical part
     return '#$paddedNumericalPart';
   }
 
   Future<void> _saveNewBooking() async {
     try {
-      // Get the current user's email
       String? currentUserEmail = FirebaseAuth.instance.currentUser?.email;
 
       if (_checkInDateTime == null || _checkOutDateTime == null) {
@@ -284,7 +265,6 @@ class _NewRoomBookingPageState extends State<NewRoomBookingPage> with TickerProv
         return;
       }
 
-      // Check if the selected dates overlap with existing bookings
       bool isOverlap = await _checkBookingOverlap();
       if (isOverlap) {
         _showErrorMessage('Selected dates overlap with existing bookings. Please choose different dates.');
@@ -306,11 +286,9 @@ class _NewRoomBookingPageState extends State<NewRoomBookingPage> with TickerProv
           picture: _userProfileData!['picture'],
         );
 
-        // Get the room data
         RoomsModel? roomData = await _roomData;
 
         if (roomData != null) {
-          // Create a BookingStatusModel instance
           BookingStatusModel bookingStatus = BookingStatusModel(
             bookingStatusID: 'Pending',
             status: 'Pending',
@@ -320,7 +298,6 @@ class _NewRoomBookingPageState extends State<NewRoomBookingPage> with TickerProv
           );
 
           ManagerModel? manager = null;
-          // Format totalBookingPrice to have two decimal places
           String formattedTotalBookingPrice = 'RM ' + totalBookingPrice.toStringAsFixed(2);
 
           RoomBookingModel roomBookingModel = RoomBookingModel(
@@ -341,13 +318,11 @@ class _NewRoomBookingPageState extends State<NewRoomBookingPage> with TickerProv
             totalBookingPrice: formattedTotalBookingPrice,
           );
 
-          // Convert roomBookingModel to JSON for storing in Firestore
           Map<String, dynamic> roomBookingData = roomBookingModel.toJson();
 
           await _firestore.collection('roomBookingData').doc(roomBookingModel.bookingID).set(roomBookingData);
 
 
-          // Assuming the booking is successfully saved
           bool isBookingSaved = true;
 
           if (isBookingSaved) {
@@ -357,7 +332,6 @@ class _NewRoomBookingPageState extends State<NewRoomBookingPage> with TickerProv
               payload: 'tf.utem',
             );
 
-            // Save notification data to Firestore
             await _firestore.collection('notifications').add({
               'title': 'Teaching Factory',
               'body': 'Your booking request has been successfully sent to our staff. Please wait for a while...',
@@ -388,29 +362,25 @@ class _NewRoomBookingPageState extends State<NewRoomBookingPage> with TickerProv
   }
 
   Future<bool> _checkBookingOverlap() async {
-    // Retrieve existing bookings for the selected room
     QuerySnapshot<Map<String, dynamic>> querySnapshot = await FirebaseFirestore.instance
         .collection('roomBookingData')
         .where('roomId', isEqualTo: widget.roomID)
-        .where('bookingStatus.status', isEqualTo: 'Reserved') // Consider only reserved bookings
+        .where('bookingStatus.status', isEqualTo: 'Reserved') 
         .get();
 
-    // Iterate through existing bookings
     for (QueryDocumentSnapshot<Map<String, dynamic>> snapshot in querySnapshot.docs) {
       Map<String, dynamic> bookingData = snapshot.data();
 
-      // Extract check-in and check-out dates from existing bookings
       DateTime existingCheckIn = DateTime.parse(bookingData['checkInDateTime']);
       DateTime existingCheckOut = DateTime.parse(bookingData['checkOutDateTime']);
 
-      // Check for null and then for overlap
       if (_checkInDateTime != null && _checkOutDateTime != null &&
           _checkInDateTime!.isBefore(existingCheckOut) &&
           _checkOutDateTime!.isAfter(existingCheckIn)) {
-        return true; // Overlap found
+        return true; 
       }
     }
-    return false; // No overlap
+    return false;
   }
 
   @override
@@ -486,8 +456,8 @@ class _NewRoomBookingPageState extends State<NewRoomBookingPage> with TickerProv
                     color: shadeColor1,
                     borderRadius: BorderRadius.circular(20),
                     border: Border.all(
-                      color: shadeColor2, // Change the color as needed
-                      width: 1.0, // Change the width as needed
+                      color: shadeColor2,
+                      width: 1.0, 
                     ),
                     boxShadow: [
                       BoxShadow(
@@ -503,7 +473,6 @@ class _NewRoomBookingPageState extends State<NewRoomBookingPage> with TickerProv
                     child: Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        //display check-in and checkout date time
                         Expanded(
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -516,7 +485,7 @@ class _NewRoomBookingPageState extends State<NewRoomBookingPage> with TickerProv
                                   style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
                                 ),
                               ),
-                              SizedBox(height: 5), // Add some vertical spacing between text and line
+                              SizedBox(height: 5), 
                               InkWell(
                                 onTap: () => _selectDate(context, true),
                                 child: Text(
@@ -524,7 +493,7 @@ class _NewRoomBookingPageState extends State<NewRoomBookingPage> with TickerProv
                                   style: TextStyle(
                                     fontSize: 15.0,
                                     fontWeight: FontWeight.bold,
-                                    color: _checkInDateTime != null ? shadeColor6 : Colors.grey, // Change color based on selection
+                                    color: _checkInDateTime != null ? shadeColor6 : Colors.grey, 
                                   ),
                                 ),
                               ),
@@ -546,7 +515,7 @@ class _NewRoomBookingPageState extends State<NewRoomBookingPage> with TickerProv
                                     style: TextStyle(
                                       fontSize: 15.0,
                                       fontWeight: FontWeight.bold,
-                                      color: _checkOutDateTime != null ? shadeColor6 : Colors.grey, // Change color based on selection
+                                      color: _checkOutDateTime != null ? shadeColor6 : Colors.grey, 
                                     ),
                                   ),
                                 ),
@@ -560,7 +529,6 @@ class _NewRoomBookingPageState extends State<NewRoomBookingPage> with TickerProv
                           color: shadeColor2.withOpacity(0.6),
                         ),
                         SizedBox(width: 30),
-                        // Display & change guest data
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
@@ -614,7 +582,7 @@ class _NewRoomBookingPageState extends State<NewRoomBookingPage> with TickerProv
 
                             SizedBox(height: 20),
                             Text(
-                              'Children :', // You can implement a similar design for children if needed
+                              'Children :', 
                               style: TextStyle(fontSize: 15.0, color: shadeColor6, fontWeight: FontWeight.bold),
                             ),
                             Row(
@@ -679,8 +647,8 @@ class _NewRoomBookingPageState extends State<NewRoomBookingPage> with TickerProv
                     color: shadeColor1,
                     borderRadius: BorderRadius.circular(20),
                     border: Border.all(
-                      color: shadeColor2, // Change the color as needed
-                      width: 1.0, // Change the width as needed
+                      color: shadeColor2, 
+                      width: 1.0,
                     ),
                     boxShadow: [
                       BoxShadow(
@@ -701,7 +669,7 @@ class _NewRoomBookingPageState extends State<NewRoomBookingPage> with TickerProv
                           children: [
                             Text(
                               'Your Info',
-                              style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold, color: Colors.black), // Change color to blue
+                              style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold, color: Colors.black), 
                             ),
                             SizedBox(height: 10),
                             if (_userProfileData != null)
@@ -712,7 +680,7 @@ class _NewRoomBookingPageState extends State<NewRoomBookingPage> with TickerProv
                                     Container(
                                       padding: EdgeInsets.all(34),
                                       decoration: BoxDecoration(
-                                        color: Colors.white, // Background color
+                                        color: Colors.white,
                                         borderRadius: BorderRadius.circular(10),
                                       ),
                                       child: Column(
@@ -720,7 +688,7 @@ class _NewRoomBookingPageState extends State<NewRoomBookingPage> with TickerProv
                                         children: [
                                           Row(
                                             children: [
-                                              Icon(Icons.person, color: shadeColor6), // Icon for user
+                                              Icon(Icons.person, color: shadeColor6),
                                               SizedBox(width: 10),
                                               Text(
                                                 'Name:',
@@ -728,7 +696,7 @@ class _NewRoomBookingPageState extends State<NewRoomBookingPage> with TickerProv
                                               ),
                                               SizedBox(width: 5),
                                               Text(
-                                                '${_userProfileData!['firstName']} ${_userProfileData!['lastName']}', // User's full name
+                                                '${_userProfileData!['firstName']} ${_userProfileData!['lastName']}', 
                                                 style: TextStyle(fontSize: 15.0, color: shadeColor5),
                                               ),
                                             ],
@@ -736,7 +704,7 @@ class _NewRoomBookingPageState extends State<NewRoomBookingPage> with TickerProv
                                           SizedBox(height: 5),
                                           Row(
                                             children: [
-                                              Icon(Icons.email, color: shadeColor6), // Icon for email
+                                              Icon(Icons.email, color: shadeColor6),
                                               SizedBox(width: 10),
                                               Text(
                                                 'Email:',
@@ -744,7 +712,7 @@ class _NewRoomBookingPageState extends State<NewRoomBookingPage> with TickerProv
                                               ),
                                               SizedBox(width: 5),
                                               Text(
-                                                _userProfileData!['email'], // User's email
+                                                _userProfileData!['email'],
                                                 style: TextStyle(fontSize: 15.0, color: shadeColor5),
                                               ),
                                             ],
@@ -752,7 +720,7 @@ class _NewRoomBookingPageState extends State<NewRoomBookingPage> with TickerProv
                                           SizedBox(height: 5),
                                           Row(
                                             children: [
-                                              Icon(Icons.phone, color: shadeColor6), // Icon for phone
+                                              Icon(Icons.phone, color: shadeColor6), 
                                               SizedBox(width: 10),
                                               Text(
                                                 'Phone Number:',
@@ -760,7 +728,7 @@ class _NewRoomBookingPageState extends State<NewRoomBookingPage> with TickerProv
                                               ),
                                               SizedBox(width: 5),
                                               Text(
-                                                _userProfileData!['phoneNumber'], // User's phone number
+                                                _userProfileData!['phoneNumber'], 
                                                 style: TextStyle(fontSize: 15.0, color: shadeColor5),
                                               ),
                                             ],
@@ -794,8 +762,8 @@ class _NewRoomBookingPageState extends State<NewRoomBookingPage> with TickerProv
                     color: shadeColor1,
                     borderRadius: BorderRadius.circular(20),
                     border: Border.all(
-                      color: shadeColor2, // Change the color as needed
-                      width: 1.0, // Change the width as needed
+                      color: shadeColor2,
+                      width: 1.0, 
                     ),
                     boxShadow: [
                       BoxShadow(
@@ -811,13 +779,12 @@ class _NewRoomBookingPageState extends State<NewRoomBookingPage> with TickerProv
                     child: Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        // Inside the 'Note' section of your UI
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
                               'Note (Optional)',
-                              style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold, color: Colors.black), // Change color to blue
+                              style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold, color: Colors.black), 
                             ),
                             SizedBox(height: 10),
                             Container(
@@ -840,15 +807,15 @@ class _NewRoomBookingPageState extends State<NewRoomBookingPage> with TickerProv
                                 ],
                               ),
                               child: TextField(
-                                maxLines: 5, // Limit to 5 lines
-                                maxLength: 60, // Limit maximum characters
-                                keyboardType: TextInputType.multiline, // Allow multiline input
-                                textAlign: TextAlign.start, // Align text to the start
+                                maxLines: 5, 
+                                maxLength: 60,
+                                keyboardType: TextInputType.multiline, 
+                                textAlign: TextAlign.start, 
                                 style: TextStyle(fontSize: 15.0, color: shadeColor6, fontWeight: FontWeight.bold),
                                 controller: _userNote,
                                 decoration: InputDecoration(
                                   hintText: 'Add your note...',
-                                  border: OutlineInputBorder(), // Use outline border
+                                  border: OutlineInputBorder(), 
                                 ),
                               ),
                             ),
@@ -873,29 +840,28 @@ class _NewRoomBookingPageState extends State<NewRoomBookingPage> with TickerProv
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      // Inside the 'Note' section of your UI
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
                             'Total Price',
-                            style: TextStyle(fontSize: 22.0, fontWeight: FontWeight.bold, color: Colors.black), // Change color to blue
+                            style: TextStyle(fontSize: 22.0, fontWeight: FontWeight.bold, color: Colors.black), 
                           ),
                           SizedBox(height: 5,),
                           Text(
                             'RM ${_totalPrice.toStringAsFixed(2)}',
-                            style: TextStyle(fontSize: 18.0, color: shadeColor6), // Change color to blue
+                            style: TextStyle(fontSize: 18.0, color: shadeColor6), 
                           ),
                           SizedBox(height: 20),
                         ],
                       ),
                       Padding(
-                        padding: const EdgeInsets.only(left: 150, top: 20), // Adjust the left padding as needed
+                        padding: const EdgeInsets.only(left: 150, top: 20), 
                         child: ElevatedButton(
                           onPressed: _saveNewBooking,
                           child: Text('Book Now', style: TextStyle(color: Colors.white), ),
                           style: ElevatedButton.styleFrom(
-                            backgroundColor: shadeColor6, // Set button text style
+                            backgroundColor: shadeColor6, 
                           ),
                         ),
                       ),
@@ -921,7 +887,7 @@ class VerticalLine extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       height: height,
-      width: 1.0, // Adjust the width of the line as needed
+      width: 1.0, 
       color: color,
     );
   }
@@ -936,8 +902,8 @@ class HorizontalLine extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 1.0, // Height is 1.0 for a horizontal line
-      width: width, // Adjust the width of the line as needed
+      height: 1.0, 
+      width: width, 
       color: color,
     );
   }
