@@ -38,11 +38,11 @@ class _NotificationPageState extends State<NotificationPage> {
                     child: Icon(Icons.delete, color: Colors.white),
                   ),
                   onDismissed: (direction) {
-                    var notificationId = _notifications[index].id; // Simpan ID notifikasi sebelum memadamkan
+                    var notificationId = _notifications[index].id; 
                     setState(() {
                       _notifications.removeAt(index);
                     });
-                    _deleteNotification(notificationId); // Gunakan ID notifikasi yang disimpan untuk pemadaman
+                    _deleteNotification(notificationId); 
                   },
                   child: Container(
                     margin: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
@@ -52,7 +52,7 @@ class _NotificationPageState extends State<NotificationPage> {
                       borderRadius: BorderRadius.circular(10),
                     ),
                     child: ListTile(
-                      contentPadding: EdgeInsets.all(10), // Add padding to ListTile content
+                      contentPadding: EdgeInsets.all(10), 
                       title: Text(
                         notification['title'] ?? 'No title',
                         style: TextStyle(
@@ -102,10 +102,8 @@ class _NotificationPageState extends State<NotificationPage> {
   }
 
   Future<QuerySnapshot> _fetchNotifications() async {
-    // Dapatkan e-mel pengguna semasa
     String? currentUserEmail = _auth.currentUser?.email;
 
-    // Query Firestore untuk notifikasi berdasarkan e-mel pengguna semasa
     QuerySnapshot querySnapshot = await _firestore
         .collection('notifications')
         .where('userEmail', isEqualTo: currentUserEmail)
