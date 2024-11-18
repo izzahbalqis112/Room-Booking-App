@@ -35,7 +35,7 @@ class _HomePageState extends State<HomePage>  with TickerProviderStateMixin{
 
   @override
   void dispose() {
-    _controller.dispose(); // Dispose the animation controller
+    _controller.dispose(); 
     super.dispose();
   }
 
@@ -68,7 +68,6 @@ class _HomePageState extends State<HomePage>  with TickerProviderStateMixin{
           ),
         );
 
-        // Extract and parse the room price
         String formattedRoomPrice = data['roomPrice'];
         double roomPrice = double.tryParse(formattedRoomPrice.substring(3)) ?? 0.0;
 
@@ -85,7 +84,6 @@ class _HomePageState extends State<HomePage>  with TickerProviderStateMixin{
         ));
       }
 
-      // Sort rooms by name in ascending order
       roomsList.sort((a, b) => a.name.compareTo(b.name));
 
       return roomsList;
@@ -135,13 +133,13 @@ class _HomePageState extends State<HomePage>  with TickerProviderStateMixin{
             decoration: BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.circular(20.0),
-              border: Border.all(color: Colors.grey.shade300), // Border color
+              border: Border.all(color: Colors.grey.shade300), 
               boxShadow: [
                 BoxShadow(
-                  color: Colors.grey.withOpacity(0.3), // Shadow color
+                  color: Colors.grey.withOpacity(0.3),
                   spreadRadius: 2,
                   blurRadius: 5,
-                  offset: Offset(0, 3), // changes position of shadow
+                  offset: Offset(0, 3), 
                 ),
               ],
             ),
@@ -190,17 +188,17 @@ class _HomePageState extends State<HomePage>  with TickerProviderStateMixin{
                             Padding(
                               padding: const EdgeInsets.only(top: 26, left: 4),
                               child: Container(
-                                width: 80, // Adjust the size as needed
-                                height: 80, // Adjust the size as needed
+                                width: 80, 
+                                height: 80,
                                 decoration: BoxDecoration(
                                   shape: BoxShape.circle,
                                   color: Colors.white,
                                 ),
                                 child: Center(
                                   child: Image.asset(
-                                    'lib/assets/img/TF-logo1.png', // Replace with your image path
-                                    width: 60, // Adjust the width as needed
-                                    height: 60, // Adjust the height as needed
+                                    'lib/assets/img/TF-logo1.png', 
+                                    width: 60, 
+                                    height: 60,
                                   ),
                                 ),
                               ),
@@ -257,8 +255,8 @@ class _HomePageState extends State<HomePage>  with TickerProviderStateMixin{
                                           color: shadeColor1,
                                           borderRadius: BorderRadius.circular(20),
                                           border: Border.all(
-                                            color: shadeColor2, // Change the color as needed
-                                            width: 2.0, // Change the width as needed
+                                            color: shadeColor2, 
+                                            width: 2.0, 
                                           ),
                                           boxShadow: [
                                             BoxShadow(
@@ -326,10 +324,10 @@ class _HomePageState extends State<HomePage>  with TickerProviderStateMixin{
                                                       fontWeight: FontWeight.bold,
                                                     ),
                                                   ),
-                                                  SizedBox(height: 5), // Adjust spacing between name and about
+                                                  SizedBox(height: 5), 
                                                   Container(
                                                     width: 360,
-                                                    child: SingleChildScrollView( // Add SingleChildScrollView for scrolling
+                                                    child: SingleChildScrollView(
                                                       scrollDirection: Axis.horizontal,
                                                       child: Text(
                                                         room.about,
@@ -337,8 +335,8 @@ class _HomePageState extends State<HomePage>  with TickerProviderStateMixin{
                                                           color: shadeColor5,
                                                           fontSize: 16,
                                                         ),
-                                                        maxLines: 3, // Limit the number of lines
-                                                        overflow: TextOverflow.ellipsis, // Handle overflow
+                                                        maxLines: 3, 
+                                                        overflow: TextOverflow.ellipsis, 
                                                       ),
                                                     ),
                                                   ),
@@ -352,7 +350,6 @@ class _HomePageState extends State<HomePage>  with TickerProviderStateMixin{
                                                           Padding(
                                                             padding: const EdgeInsets.symmetric(
                                                                 horizontal: 4.0),
-                                                            // Adjust the horizontal padding as needed
                                                             child: buildFacility(facility),
                                                           ),
                                                       ],
@@ -371,16 +368,16 @@ class _HomePageState extends State<HomePage>  with TickerProviderStateMixin{
                                                   Row(
                                                     children: [
                                                       Text(
-                                                        'RM ' + room.roomPrice.toStringAsFixed(2), // Room price with currency
+                                                        'RM ' + room.roomPrice.toStringAsFixed(2), 
                                                         style: TextStyle(
                                                           color: shadeColor2,
                                                           fontSize: 20,
                                                           fontWeight: FontWeight.bold,
                                                         ),
                                                       ),
-                                                      SizedBox(width: 5), // Adjust spacing between room price and "/Day" text
+                                                      SizedBox(width: 5), 
                                                       Text(
-                                                        '/day', // Text for "/Day"
+                                                        '/day', 
                                                         style: TextStyle(
                                                           color: shadeColor5,
                                                           fontSize: 18,
@@ -413,7 +410,7 @@ class _HomePageState extends State<HomePage>  with TickerProviderStateMixin{
     );
   }
   Widget buildFacility(String facilityName) {
-    IconData iconData = facilityIcons[facilityName] ?? EvaIcons.questionMarkCircleOutline; // Default icon if not found
+    IconData iconData = facilityIcons[facilityName] ?? EvaIcons.questionMarkCircleOutline; 
     return Column(
       children: [
         Container(
