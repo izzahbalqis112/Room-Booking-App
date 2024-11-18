@@ -13,7 +13,6 @@ class EditProfilePage extends StatefulWidget {
 }
 
 class _EditProfilePageState extends State<EditProfilePage> {
-  // Text controllers
   final TextEditingController _firstNameController = TextEditingController();
   final TextEditingController _lastNameController = TextEditingController();
   final TextEditingController _companyNameController = TextEditingController();
@@ -64,7 +63,6 @@ class _EditProfilePageState extends State<EditProfilePage> {
         setState(() {
           _userProfileData = userData;
           _isLoading = false;
-          // Set the initial values of the text controllers
           _firstNameController.text = _userProfileData?['firstName'] ?? '';
           _lastNameController.text = _userProfileData?['lastName'] ?? '';
           _companyNameController.text = _userProfileData?['companyName'] ?? '';
@@ -316,12 +314,12 @@ class _EditProfilePageState extends State<EditProfilePage> {
                                       children: [
                                         Padding(
                                           padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                                          child: Icon(Icons.phone), // Phone number icon
+                                          child: Icon(Icons.phone), 
                                         ),
                                         Expanded(
                                           child: TextField(
-                                            controller: _phoneNumberController, // Use _phoneNumberController
-                                            keyboardType: TextInputType.phone, // Set keyboard type to phone
+                                            controller: _phoneNumberController,
+                                            keyboardType: TextInputType.phone, 
                                             decoration: InputDecoration(
                                               hintText: 'Phone number',
                                               hintStyle: TextStyle(color: Colors.grey),
@@ -333,7 +331,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                                             ),
                                             onChanged: (value) {
                                               setState(() {
-                                                _phoneNumber = value; // Update _phoneNumber variable
+                                                _phoneNumber = value;
                                               });
                                             },
                                           ),
