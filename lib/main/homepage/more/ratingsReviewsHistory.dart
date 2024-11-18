@@ -71,7 +71,6 @@ class RatingsList extends StatelessWidget {
               final bookingRatings = rating['bookingRatings'] as Map<String, dynamic>;
 
               if (bookingRatings == null || !bookingRatings.containsKey('userRating') || bookingRatings['userRating'] == null) {
-                // Return a ListTile with an empty state or a message
                 return ListTile(
                   title: Text(
                     'No ratings available',
@@ -85,10 +84,9 @@ class RatingsList extends StatelessWidget {
               }
 
               final user = rating['user'] as Map<String, dynamic>;
-              final userRating = bookingRatings['userRating'] as double; // Assuming userRating is a double
+              final userRating = bookingRatings['userRating'] as double;
               final room = rating['room'] as Map<String, dynamic>;
 
-              // Format the date and time
               final dateTime = (bookingRatings['dateTimeToday'] as Timestamp).toDate();
               final formattedDate = DateFormat('dd/MM/yyyy').format(dateTime);
               final formattedTime = DateFormat('hh:mm a').format(dateTime);
@@ -102,7 +100,7 @@ class RatingsList extends StatelessWidget {
                         user['picture'] ?? '',
                       ),
                     ),
-                    SizedBox(width: 10), // Add some spacing between the image and text
+                    SizedBox(width: 10), 
                     Expanded(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -110,8 +108,8 @@ class RatingsList extends StatelessWidget {
                           RichText(
                             text: TextSpan(
                               style: TextStyle(
-                                fontSize: 16.0, // Adjust the font size as needed
-                                color: Colors.black, // Define the text color
+                                fontSize: 16.0, 
+                                color: Colors.black, 
                               ),
                               children: [
                                 TextSpan(text: '${user['firstName']} ', style: TextStyle(fontWeight: FontWeight.bold)),
@@ -122,11 +120,11 @@ class RatingsList extends StatelessWidget {
                           SizedBox(height: 5),
                           Text(
                             'Booking ID ${rating['displayBookingID']}',
-                            style: TextStyle(fontSize: 14.0, color: shadeColor2), // Adjust the font size as needed
+                            style: TextStyle(fontSize: 14.0, color: shadeColor2), 
                           ),
                           Text(
                             '${room['name']}',
-                            style: TextStyle(fontSize: 14.0, color: shadeColor2), // Adjust the font size as needed
+                            style: TextStyle(fontSize: 14.0, color: shadeColor2),
                           ),
                         ],
                       ),
@@ -141,7 +139,7 @@ class RatingsList extends StatelessWidget {
                       children: [
                         Expanded(
                           child: RatingBar.builder(
-                            initialRating: userRating, // Set the initial rating
+                            initialRating: userRating,
                             minRating: 1,
                             direction: Axis.horizontal,
                             allowHalfRating: true,
@@ -152,11 +150,10 @@ class RatingsList extends StatelessWidget {
                               color: Colors.amber,
                             ),
                             onRatingUpdate: (rating) {
-                              // Dummy function, as it won't be used
                             },
                           ),
                         ),
-                        SizedBox(width: 10), // Add some spacing between the rating bar and text
+                        SizedBox(width: 10), 
                         Text('$formattedDate , $formattedTime', style: TextStyle(fontSize: 14.0)),
                       ],
                     ),
@@ -173,10 +170,8 @@ class RatingsList extends StatelessWidget {
   }
 
   Future<List<DocumentSnapshot>> _fetchCompletedBookings() async {
-    // Get the current user's email
     User? currentUser = FirebaseAuth.instance.currentUser;
     if (currentUser == null) {
-      // Handle the case where the user is not authenticated
       return [];
     }
     String currentUserEmail = currentUser.email!;
