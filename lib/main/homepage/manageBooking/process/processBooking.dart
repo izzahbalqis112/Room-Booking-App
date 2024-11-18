@@ -19,14 +19,12 @@ class _ProcessBookingPageState extends State<ProcessBookingPage> {
   }
 
   Future<List<DocumentSnapshot>> _fetchProcessBookings() async {
-    // Get the current user's email
     String? currentUserEmail = FirebaseAuth.instance.currentUser?.email;
 
-    // Query Firestore for pending bookings belonging to the current user
     QuerySnapshot snapshot = await FirebaseFirestore.instance
         .collection('roomBookingData')
         .where('bookingStatus.status', isEqualTo: 'Processing')
-        .where('user.email', isEqualTo: currentUserEmail) // Filter by user email
+        .where('user.email', isEqualTo: currentUserEmail) 
         .get();
 
     return snapshot.docs;
@@ -78,7 +76,6 @@ class ContainerWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Extract data from the booking document
     var displayBookingID = booking['displayBookingID'] ?? '';
     var roomName = booking['room']['name'] ?? '';
     var status = booking['bookingStatus']['status'] ?? '';
@@ -94,7 +91,6 @@ class ContainerWidget extends StatelessWidget {
     DecorationImage? backgroundImage;
 
     if (roomImages.isNotEmpty) {
-      // Assuming you want to use the first image in the list
       String imageUrl = roomImages[0];
       backgroundImage = DecorationImage(
         image: CachedNetworkImageProvider(imageUrl),
@@ -253,8 +249,8 @@ class HorizontalLine extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 1.0, // Height is 1.0 for a horizontal line
-      width: width, // Adjust the width of the line as needed
+      height: 1.0, 
+      width: width,
       color: color,
     );
   }
